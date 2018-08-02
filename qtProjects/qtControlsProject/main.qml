@@ -6,13 +6,12 @@ import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 //import QtCharts 2.0
 
-ApplicationWindow {
+Item {
     id: windoof
     objectName: "windoof"
     visible: true
     width: 640
     height: 480
-    title: qsTr("Hello World")
 
     // TABBAR
 

@@ -39,7 +39,7 @@ void MyBackend::updateFilePreview(QString fileName)
         mybox->setProperty("text", text);
 }
 
-void MyBackend::setRootObject(QObject* theRootObject)
+void MyBackend::setRootObject(QQuickItem* theRootObject)
 {
     if(theRootObject == nullptr) {
         qDebug("BACKEND ERROR WHEN SETTING ROOT OBJECT: NULLPTR");

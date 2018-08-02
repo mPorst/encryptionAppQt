@@ -1,32 +1,46 @@
-#include <QGuiApplication>
+/*#include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext> // required for setting context property
 #include "backend.h"
 #include <QDebug>
+*/
+
+// Now: QApplication replaces QGuiApplication
+// QQuickView replaces QQmlApplicationEngine
+
+#include <QDebug>
+#include "backend.h"
+#include <QQuickView>
+#include <QCoreApplication>
+#include <QApplication>
+#include <QQmlContext>
+#include <QtQml/QQmlEngine>
+
+
 
 int main(int argc, char *argv[])
 {
     // initialisation
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication app(argc, argv);
+    //QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication app(argc, argv);
 
-    QQmlApplicationEngine engine;
+    QQuickView* viewer = new QQuickView;
     // load backend class
     MyBackend backend;
-    engine.rootContext()->setContextProperty("backend", &backend);
+    viewer->rootContext()->setContextProperty("backend", &backend);
     //QObject::connect(&backend, SIGNAL(backend.textChanged("new Text")), engine.rootObjects()[0], );
-    engine.addImportPath("/home/moritz/qtProjects/qtControlsProject/qml");
-    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
-    if (engine.rootObjects().isEmpty())
+    viewer->engine()->addImportPath("/home/moritz/qtProjects/qtControlsProject/qml");
+    viewer->setSource(QUrl(QLatin1String("qrc:/main.qml")));
+    if (viewer->rootObject() == nullptr)
         return -1;
 
-    QObject* item = engine.rootObjects().first();
+    QQuickItem* item = viewer->rootObject();
     backend.setRootObject(item);
     if(item == nullptr)
     {
         qDebug() << "Es wurde kein Root-Objekt gefunden. Beende QT.";
     }
-    qDebug() << item->objectName();
 
+    viewer->show();
     return app.exec();
 }

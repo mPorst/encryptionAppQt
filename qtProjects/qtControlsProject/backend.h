@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <string>
+#include <QQuickItem>
 
 class MyBackend : public QObject
 {
@@ -11,8 +12,8 @@ class MyBackend : public QObject
     //Q_PROPERTY (QString fileText MEMBER m_text NOTIFY textChanged)
 
 public:
-    explicit MyBackend(QObject *parent = nullptr);
-    void setRootObject(QObject* theRootObject);
+    explicit MyBackend(QObject* parent = nullptr);
+    void setRootObject(QQuickItem* theRootObject);
 
 public slots:
     void encrypt(QString filename, QString key);
@@ -24,7 +25,7 @@ signals:
     void textChanged(QString newText);
 
 private:
-    QObject* rootObject;
+    QQuickItem* rootObject;
 };
 
 #endif // BACKEND_H
