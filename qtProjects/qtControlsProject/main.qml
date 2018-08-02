@@ -1,5 +1,6 @@
 import QtQuick 2.2
 import QtQuick.Controls 2.2
+import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
@@ -76,20 +77,23 @@ ApplicationWindow {
         Item {
             id: graphTab
 
-            TextInput {
+            Text{
                 id: someTextArea
                 objectName: "someTextArea"
-                anchors.centerIn: parent
                 width: 240
-                text: "Hello sagfadsgjoidsagjjpoiewaa"
+                height: 240
+                anchors.centerIn: parent
+                wrapMode:Text.Wrap
+                text: "Here the file preview will be shown"
             }
 
             Button {
                 id: previewButton
                 objectName: "previewButton"
-                anchors.left: someTextArea.right
-                anchors.leftMargin: 30
-                anchors.verticalCenter: someTextArea
+                text: "preview file"
+                anchors.right: someTextArea.left
+                anchors.rightMargin: 30
+                anchors.verticalCenter: someTextArea.verticalCenter
                 onClicked: {
                     backend.updateFilePreview(filename.text)
                 }
