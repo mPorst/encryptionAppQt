@@ -1,5 +1,6 @@
 #include "fileHelper.h"
 #include <fstream>
+#include <QDebug>
 
 unsigned int FileSize(std::fstream* f)
 {
@@ -18,14 +19,33 @@ std::string fileText(std::string filename)
     std::fstream f;
     f.open(filename.c_str(), std::fstream::in);
     while(f.get(s))
-    { // while loop that aborts either at eof or after 500 characters -> preview
+    { // while loop that aborts either at eof or after 100 characters -> preview
         text.push_back(s);
         ++i;
-        if(i >= 500)
+        if(i >= 100)
         {
             break;
         }
     }
     f.close();
     return text;
+}
+
+std::vector<int> characterDistribution(std::string filename)
+{
+    std::vector<int> result (256, 0);
+    char s=0; int i=0;
+    std::fstream f;
+    f.open(filename.c_str(), std::fstream::in);
+    while(f.get(s))
+    { // while loop that aborts either at eof or after 100 characters -> preview
+        try {
+        result.at(s+128) += 1; //s is unsigned
+        }
+        catch(std::out_of_range& e) {
+            qDebug() << s+127;
+        }
+    }
+    f.close();
+    return result;
 }

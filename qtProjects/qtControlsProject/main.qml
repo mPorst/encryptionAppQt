@@ -1,4 +1,5 @@
 import QtQuick 2.2
+import QtCharts 2.2
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.3
@@ -72,31 +73,73 @@ Item {
                 anchors.leftMargin: 10
                 anchors.top: encryptButton.top
             }
-    }
-        Item {
-            id: graphTab
+
+            Text {
+                id: labelToSomeTextArea
+                width:240
+                height:20
+                anchors.bottom: someTextArea.top
+                anchors.bottomMargin: 10
+                anchors.left: someTextArea.left
+                anchors.leftMargin: -20
+                text: "File Preview:"
+            }
 
             Text{
                 id: someTextArea
                 objectName: "someTextArea"
                 width: 240
                 height: 240
-                anchors.centerIn: parent
+                anchors.left: passwordField.right
+                anchors.leftMargin: 30
+                anchors.top: parent.top
+                anchors.topMargin: 80
                 wrapMode:Text.Wrap
                 text: "Here the file preview will be shown"
+                //text: backend.graphValues.toString() // for debug purposes
             }
 
-            Button {
+            /*
+                Button {
                 id: previewButton
                 objectName: "previewButton"
                 text: "preview file"
                 anchors.right: someTextArea.left
                 anchors.rightMargin: 30
+                anchors.top: passwordField.bottom
+                anchors.topMargin: 30
                 anchors.verticalCenter: someTextArea.verticalCenter
                 onClicked: {
                     backend.updateFilePreview(filename.text)
                 }
+                }
+            */
 
+            }
+        Item {
+            id: graphTab
+            objectName: "graphTab"
+            anchors.fill: parent
+
+            ChartView {
+                id: myChartview
+                objectName: "chartview"
+                theme: ChartView.ChartThemeDark
+                title: "Character Distribution in File"
+                width: 400
+                height: 400
+                anchors.centerIn: parent
+                //legend.alignment: Qt.AlignBottom
+                antialiasing: true
+
+                BarSeries {
+                    objectName: "barseries"
+                    id: mySeries
+                    //axisX: BarCategoryAxis { categories: ["2007", "2008", "2009", "2010", "2011"] }
+                    axisX: BarCategoryAxis {categories: backend.xLabels }
+                    axisY: ValueAxis { min: 0; max: backend.yMax }
+                    BarSet {  label: backend.fileText; values: backend.graphValues; objectName: "barset"}
+                }
             }
 
             }
@@ -113,6 +156,9 @@ Item {
                 onAccepted: {
                     console.log("You chose: " + fileDialog.fileUrls)
                     filename.text = fileDialog.fileUrl
+                    //afterwards may be set (if not preview stays empty, throws no error)
+                    backend.updateFilePreview(filename.text)
+                    backend.updateGraph(filename.text)
                 }
                 onRejected: {
                     console.log("canceled")

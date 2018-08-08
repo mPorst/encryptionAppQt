@@ -1,4 +1,5 @@
-/*#include <QGuiApplication>
+/*
+#include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext> // required for setting context property
 #include "backend.h"
@@ -35,12 +36,12 @@ int main(int argc, char *argv[])
         return -1;
 
     QQuickItem* item = viewer->rootObject();
-    backend.setRootObject(item);
     if(item == nullptr)
-    {
-        qDebug() << "Es wurde kein Root-Objekt gefunden. Beende QT.";
-    }
+        qDebug() << "Es wurde kein Root-Objekt gefunden.";
+    else
+        backend.setRootObject(item);
 
+    backend.initUI();
     viewer->show();
     return app.exec();
 }
